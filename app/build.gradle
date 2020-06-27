@@ -1,0 +1,164 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'org.sonarqube'
+apply plugin: 'jacoco'
+
+android {
+    compileSdkVersion COMPILE_SDK
+    flavorDimensions "mobFlavor"
+    defaultConfig {
+        minSdkVersion MIN_SDK
+        targetSdkVersion TARGET_SDK
+        applicationId System.getenv("BUNDLE_ID") as String ?: "com.archit.androidframework"
+        versionCode System.getenv("BUILD_NUMBER") as Integer ?: 1
+        versionName System.getenv("VERSION_STRING") as String ?: DEFAULT_VERSION_NAME
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            ext.alwaysUpdateBuildId = false
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+//    signingConfigs {
+//        sitMob {
+//            keyAlias project.property('signing.Test.key')
+//            keyPassword project.property('signing.Test.password')
+//            storeFile file(project.property('signing.store.file'))
+//            storePassword project.property('signing.store.password')
+//        }
+//        uatMob {
+//            keyAlias project.property('signing.Test.key')
+//            keyPassword project.property('signing.Test.password')
+//            storeFile file(project.property('signing.store.file'))
+//            storePassword project.property('signing.store.password')
+//        }
+//    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${variant.name}-${variant.versionName}-${variant.versionCode}.apk"
+        }
+    }
+
+    productFlavors {
+        devMob {
+            dimension "mobFlavor"
+            applicationIdSuffix System.getenv("BUNDLE_ID") != null ? "" : ".devMob"
+            manifestPlaceholders = [ENABLE_CLEARTEXT_TRAFFIC: "true"]
+        }
+        sitMob {
+            dimension "mobFlavor"
+            applicationIdSuffix System.getenv("BUNDLE_ID") != null ? "" : ".sitMob"
+            manifestPlaceholders = [ENABLE_CLEARTEXT_TRAFFIC: "true"]
+        }
+        uatMob {
+            dimension "mobFlavor"
+            applicationIdSuffix System.getenv("BUNDLE_ID") != null ? "" : ".uatob"
+            manifestPlaceholders = [ENABLE_CLEARTEXT_TRAFFIC: "false"]
+        }
+        prodMob {
+            dimension "mobFlavor"
+            applicationId 'com.bankabc.ilabank'
+            manifestPlaceholders = [ENABLE_CLEARTEXT_TRAFFIC: "false"]
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            jvmArgs '-noverify', '-ea'
+            jacoco {
+                includeNoLocationClasses = true
+            }
+            it.filter {
+                // includeTestsMatching "com.backbase.model.onboarding.*" run only specific test case package
+            }
+            maxParallelForks = (Runtime.runtime.availableProcessors() - 2) ?: 1
+            testLogging {
+                afterSuite { desc, result ->
+                    if (!desc.parent) { // will match the outermost suite
+                        def parallel = "maxParallelForks : ${maxParallelForks}"
+                        def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+                        def startItem = '|  ', endItem = '  |'
+                        def repeatLength = startItem.length() + output.length() + endItem.length()
+                        def parallelRepeatLength = repeatLength - startItem.length() + parallel.length() + endItem.length()
+                        println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + startItem + parallel + (' ' * parallelRepeatLength) + endItem  + '\n' + ('-' * repeatLength))
+                    }
+                }
+            }
+        }
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
+
+    task printVersion {
+        doFirst {
+            print android.defaultConfig.versionName + "-" + android.defaultConfig.versionCode
+        }
+    }
+
+    task prePushTask(dependsOn: ['clean', 'testNeoDevDebugUnitTest']) {
+        doLast {
+            println 'Pre push tasks are all done.'
+        }
+    }
+
+    copy {
+        from '../githooks'
+        into '../.git/hooks'
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+
+    //kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:${KOTLIN_VERSION}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${KOTLIN_COROUTINE_VERSION}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${KOTLIN_COROUTINE_VERSION}"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${KOTLIN_COROUTINE_VERSION}"
+
+    //android code
+    implementation "androidx.core:core-ktx:${ANDROID_CORE_VERSION}"
+    implementation "androidx.appcompat:appcompat:${ANDROID_X_VERSION}"
+    implementation "androidx.constraintlayout:constraintlayout:${CONSTRAINT_LAYOUT_VERSION}"
+    implementation "androidx.recyclerview:recyclerview:${ANDROID_X_VERSION}"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${ANDROID_X_VERSION}"
+    implementation "androidx.cardview:cardview:${ANDROID_X_VERSION}"
+    implementation "com.google.android.material:material:${ANDROID_X_VERSION}"
+    implementation "androidx.viewpager2:viewpager2:${VIEWPAGER2_VERSION}"
+
+    //
+    implementation "com.google.code.gson:gson:${GSON_VERSION}"
+    implementation "pub.devrel:easypermissions:${EASY_PERMISSON_VERSION}"
+
+    //test
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:${MOCKITO_VERSION}"
+    testImplementation "org.powermock:powermock-api-mockito2:${POWER_MOCK_VERSION}"
+    testImplementation "org.powermock:powermock-module-junit4:${POWER_MOCK_VERSION}"
+    testImplementation "org.powermock:powermock-core:${POWER_MOCK_VERSION}"
+    testImplementation "org.powermock:powermock-module-junit4-rule:${POWER_MOCK_VERSION}"
+    testImplementation "org.powermock:powermock-api-mockito2:${POWER_MOCK_VERSION}"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+}

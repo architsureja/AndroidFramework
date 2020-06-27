@@ -1,0 +1,20 @@
+sonarqube {
+    properties {
+        property "sonar.projectKey", ""
+        property "sonar.projectName", ""
+        property "sonar.projectDescription", ""
+        property "sonar.projectVersion", "${System.getenv('BUILD_NUMBER')}"
+        property "sonar.sourceEncoding","UTF-8"
+        property "sonar.java.test.binaries", "build/intermediates/classes/test/, app/build/tmp/kotlin-classes/devDebugUnitTest"
+        property "sonar.java.binaries", "build/intermediates/classes/devDebug/, app/build/tmp/kotlin-classes/devDebug/"
+        property "sonar.binaries", "build/intermediates/classes/devDebug/, app/build/tmp/kotlin-classes/devDebug/"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.junit.reportPath", "build/test-results/testDevDebugUnitTest"
+        property "sonar.jacoco.reportPaths", "app/build/jacoco/testDevDebugUnitTest.exec"
+        property "sonar.tests", "src/test/java/com/mobiquity/, src/androidTest/java/com/mobiquity/"
+        property "sonar.sources", "src/main/java/com/mobiquity/"
+        //property "sonar.inclusions", "**/onboarding/**, **/view/widget/**" if you want include specific package
+        property "sonar.coverage.exclusions", "**/R.class, **/R.*, **/BR.class, **/BuildConfig.*, **/Manifest*.*, **/*Test*.*, **/*Fragment*.*, **/*Activity.*, **/*Activity*.*, **/view/**, **/views/**/, **/*Activity.*, **/android/**/, **/*View.*, **/*Adapter.*, **/Layout.*, **/*ViewInjector*.*, **/*Injector.*, **/utils/log/**/, **/databinding/**/, **/*Component*, **/*Application.*, **/jumio/**, **/error/network/**"
+        property "sonar.coverage.jacoco.xmlReportPaths" , "app/build/reports/jacocoTestReport/jacocoTestReport.xml, build/reports/jacocoTestReport/jacocoTestReport.xml"
+    }
+}

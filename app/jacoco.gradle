@@ -1,0 +1,134 @@
+apply plugin: 'jacoco'
+
+configurations {
+    jacocoAnt
+    jacocoRuntime
+}
+
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+def excludes = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/*$ViewInjector*.*',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        '**/*Test*.*',
+        '**/*Fragment*.*',
+        '**/*Activity.*',
+        '**/*Activity$*.*',
+        '**/utils/log/**/',
+        '**/BR.class',
+        '**/views/**/',
+        '**/databinding/**/',
+        '**/*Component*',
+        '**/*Injector.*',
+        '**/*Application.class',
+        '**/*_*.*',
+        '**/android/**/',
+        '**/*View.*'
+]
+project.afterEvaluate {
+    //Gather build type and product flavor names in a list
+    def buildTypes = android.buildTypes.collect { type -> type.name }
+    def productFlavors = android.productFlavors.collect { flavor -> flavor.name }
+
+    if (!productFlavors) productFlavors.add('')
+
+    productFlavors.each { productFlavorName ->
+        buildTypes.each { buildTypeName ->
+
+            //Define the sourceName and the sourcePath.
+            def sourceName, sourcePath
+            if (!productFlavorName) {
+                sourceName = sourcePath = "${buildTypeName}"
+            } else {
+                sourceName = "${productFlavorName}${buildTypeName.capitalize()}"
+                sourcePath = "${productFlavorName}/${buildTypeName}"
+            }
+
+            def testTaskName = "test${sourceName.capitalize()}UnitTest"
+
+            def offline_instrumented_outputDir = "${buildDir.path}/intermediates/classes-instrumented/${sourcePath}"
+
+
+            task "jacoco${sourceName.capitalize()}TestReport"(type: JacocoReport, dependsOn: ["${testTaskName}"]) {
+                group = "Reporting"
+                description = "Generate Jacoco coverage reports on the ${sourceName.capitalize()} build."
+
+                // generated classes
+                getClassDirectories().setFrom(files([fileTree(
+                        dir: "${project.buildDir}/intermediates/classes/${sourcePath}",
+                        excludes: excludes
+                ), fileTree(
+                        dir: "${project.buildDir}/tmp/kotlin-classes/${sourceName}",
+                        excludes: excludes
+                )]))
+
+                getSourceDirectories().setFrom(files(["src/main/java",
+                                           "src/${productFlavorName}/java",
+                                           "src/${buildTypeName}/java"]))
+                getExecutionData().setFrom(files("${project.buildDir}/jacoco/${testTaskName}.exec"))
+
+                reports {
+                    xml.enabled  true
+                    html.enabled  true
+                    xml.destination file("build/reports/jacocoTestReport/jacocoTestReport.xml")
+                    html.destination file("build/reports/jacocoTestReport/html/")
+                }
+            }
+
+            task "jacocoOffline${sourceName.capitalize()}TestReport"(dependsOn: ["instrument${sourceName.capitalize()}", "${testTaskName}"]) {
+                doLast {
+
+                    ant.taskdef(name: 'report',
+                            classname: 'org.jacoco.ant.ReportTask',
+                            classpath: configurations.jacocoAnt.asPath)
+                    ant.report() {
+                        executiondata {
+                            ant.file(file: "${buildDir.path}/jacoco/${testTaskName}.exec")
+                        }
+                        structure(name: "${sourceName.capitalize()}") {
+                            classfiles {
+                                fileset(dir: "${project.buildDir}/tmp/kotlin-classes/${sourceName}", excludes: excludes)
+                            }
+                            sourcefiles {
+                                fileset(dir: 'src/main/java')
+                            }
+                        }
+                    }
+                }
+            }
+            gradle.taskGraph.whenReady { graph ->
+                if (graph.hasTask(tasks.getByPath("instrument${sourceName.capitalize()}"))) {
+                    tasks.withType(Test) {
+                        doFirst {
+                            systemProperty 'jacoco-agent.destfile', "${buildDir.path}/jacoco/${testTaskName}.exec"
+                            classpath = files(offline_instrumented_outputDir) + classpath + configurations.jacocoRuntime
+                        }
+                    }
+                }
+            }
+
+            task "instrument${sourceName.capitalize()}"(dependsOn: "compile${sourceName.capitalize()}UnitTestSources") {
+                doLast {
+                    println 'Instrumenting classes'
+
+                    ant.taskdef(name: "instrument",
+                            classname: 'org.jacoco.ant.InstrumentTask',
+                            classpath: configurations.jacocoAnt.asPath)
+
+                    ant.instrument(destdir: offline_instrumented_outputDir) {
+                        fileset(dir: "${project.buildDir}/tmp/kotlin-classes/${sourceName}")
+                    }
+                }
+            }
+        }
+    }
+}
