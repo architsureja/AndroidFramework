@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.archit.androidframework.picker.fragment.PickerDashboardFragment">
+
+    <com.archit.androidframework.picker.views.NumberPicker
+        android:id="@+id/sharePicker"
+        android:layout_width="@dimen/number_picker_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        />
+
+</FrameLayout>

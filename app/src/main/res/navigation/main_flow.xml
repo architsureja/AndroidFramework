@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_flow"
+    app:startDestination="@id/mainDashboardFragment">
+
+    <fragment
+        android:id="@+id/mainDashboardFragment"
+        android:name="com.archit.androidframework.main.fragment.MainDashboardFragment"
+        android:label="main_dashboard_fragment"
+        tools:layout="@layout/main_dashboard_fragment" >
+        <action
+            android:id="@+id/actionStartPickerActivity"
+            app:destination="@id/pickerActivity" />
+        <action
+            android:id="@+id/actionStartStackingViewHolderActivity"
+            app:destination="@id/stackingViewHolderActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/stackingViewHolderActivity"
+        android:name="com.archit.androidframework.stacking_viewholder.StackingViewHolderActivity"
+        android:label="activity_picker"
+        tools:layout="@layout/activity_picker" />
+    <activity
+        android:id="@+id/pickerActivity"
+        android:name="com.archit.androidframework.picker.PickerActivity"
+        android:label="activity_stacking_viewholder"
+        tools:layout="@layout/activity_stacking_viewholder" />
+</navigation>

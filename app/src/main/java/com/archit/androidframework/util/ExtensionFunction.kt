@@ -1,13 +1,16 @@
-/*
- * Copyright (c) Mobiquityinc, 2020.
- * All rights reserved.
- */
-package com.mobiquity.backbaseframework.util
+package com.archit.androidframework.util
 
+import android.content.Context
+import android.util.DisplayMetrics
 import android.view.View
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import java.lang.reflect.Type
 
 /**
@@ -26,12 +29,45 @@ internal fun View.invisible() {
     visibility = View.INVISIBLE
 }
 
-internal fun <T: View> T.setOnClickListener() = callbackFlow {
+internal fun Int.convertDpToPixel(context: Context): Int {
+    val a: Number = 8
+    val resources = context.resources
+    val metrics = resources.displayMetrics
+    return (this@convertDpToPixel * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)).toInt()
+}
+
+internal fun View.setOnClickListener() = callbackFlow {
     this@setOnClickListener.setOnClickListener {
-        offer(it as T)
+        offer(it as View)
     }
     awaitClose { this@setOnClickListener.setOnClickListener(null) }
 }
+
+internal fun View.setDebounceOnClickListener(
+    debounceTimeInMilli: Long = 300,
+    action: (View) -> Unit
+) = setOnClickListener().debounce(debounceTimeInMilli).onEach {
+    action(it)
+}.launchIn(CoroutineScope(Dispatchers.Main))
+
+internal fun setOnClickListener(views: List<View>) =
+    callbackFlow {
+        val produceListener: (View) -> Unit = { offer(it) }
+        views.forEach { view -> view.setOnClickListener(produceListener) }
+
+        awaitClose {
+            views.forEach { view -> view.setOnClickListener(null) }
+        }
+
+    }
+
+internal fun setDebounceOnClickListener(
+    views: List<View>,
+    debounceTimeInMilli: Long = 300,
+    action: (View) -> Unit
+) = setOnClickListener(views).debounce(debounceTimeInMilli).onEach {
+    action(it)
+}.launchIn(CoroutineScope(Dispatchers.Main))
 
 internal fun <T> Gson.fromJsonOrNull(json: String?, classOfT: Class<T>): T? {
     return try {

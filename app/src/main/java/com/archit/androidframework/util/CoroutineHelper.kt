@@ -1,21 +1,6 @@
-/*
- * Copyright (c) Mobiquityinc, 2019.
- * All rights reserved.
- */
-package com.mobiquity.backbaseframework.util
+package com.archit.androidframework.util
 
-import android.graphics.Bitmap
-import android.widget.ImageView
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
+import kotlinx.coroutines.*
 
 open class CoroutineHelper {
 

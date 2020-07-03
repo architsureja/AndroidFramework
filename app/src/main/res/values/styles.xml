@@ -7,4 +7,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="H1Header" parent="android:Widget.TextView">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:lineSpacingExtra">8sp</item>
+    </style>
+
 </resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <com.archit.androidframework.picker.views.NumberPickerRecyclerView
+            android:id="@+id/numberPickerRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:fillViewport="false"
+            android:isScrollContainer="false" />
+
+        <View
+            android:layout_gravity="center_vertical"
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/number_picker_center_line_height"
+            android:layout_marginBottom="@dimen/number_picker_center_line_margin"
+            android:background="@color/activeblue" />
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/number_picker_center_line_height"
+            android:background="@color/activeblue"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/number_picker_center_line_margin" />
+    </FrameLayout>

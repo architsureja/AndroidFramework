@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="number_picker_center_line_height">2dp</dimen>
+    <dimen name="number_picker_center_line_margin">32dp</dimen>
+    <dimen name="number_picker_width">64dp</dimen>
+</resources>
