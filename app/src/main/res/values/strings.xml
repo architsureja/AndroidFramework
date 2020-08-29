@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AndroidFramework</string>
+
+    <string name="next">Next</string>
+    <string name="get_images">Get Images</string>
+    <string name="done">Done</string>
 </resources>

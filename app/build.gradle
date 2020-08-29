@@ -91,7 +91,7 @@ android {
                 includeNoLocationClasses = true
             }
             it.filter {
-                // includeTestsMatching "com.backbase.model.onboarding.*" run only specific test case package
+                // includeTestsMatching "com.archit.androidframework.stacking_viewholder.*" run only specific test case package
             }
             maxParallelForks = (Runtime.runtime.availableProcessors() - 2) ?: 1
             testLogging {
@@ -135,52 +135,56 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
-    //kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:${KOTLIN_VERSION}"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${KOTLIN_COROUTINE_VERSION}"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${KOTLIN_COROUTINE_VERSION}"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${KOTLIN_COROUTINE_VERSION}"
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$KOTLIN_VERSION"
 
-    //android code
-    implementation "androidx.core:core-ktx:${ANDROID_CORE_VERSION}"
-    implementation "androidx.appcompat:appcompat:${ANDROID_X_VERSION}"
-    implementation "androidx.constraintlayout:constraintlayout:${CONSTRAINT_LAYOUT_VERSION}"
-    implementation "androidx.recyclerview:recyclerview:${ANDROID_X_VERSION}"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${ANDROID_X_VERSION}"
-    implementation "androidx.cardview:cardview:${ANDROID_X_VERSION}"
-    implementation "com.google.android.material:material:${ANDROID_X_VERSION}"
-    implementation "androidx.viewpager2:viewpager2:${VIEWPAGER2_VERSION}"
-//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$KOTLIN_COROUTINE_VERSION"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$KOTLIN_COROUTINE_VERSION"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$KOTLIN_COROUTINE_VERSION"
 
-    //dagger
-    implementation "com.google.dagger:hilt-android:${DAGGER_HILT_VERSION}"
-    kapt "com.google.dagger:hilt-android-compiler:${DAGGER_HILT_VERSION}"
+    // android x legacy support
+    implementation "androidx.legacy:legacy-support-v4:$ANDROIDX_LAGACY_SUPPORT"
 
-    //navigation
+    // android
+    implementation "androidx.core:core-ktx:$ANDROID_CORE_VERSION"
+    implementation "androidx.appcompat:appcompat:$APPCOMPAT_VERSION"
+    implementation "androidx.constraintlayout:constraintlayout:$CONSTRAINT_LAYOUT_VERSION"
+    implementation "androidx.cardview:cardview:$CARDVIEW_VERSION"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$SWIPE_REFRESH_VERSION"
+    implementation "androidx.recyclerview:recyclerview:$RECYCLER_VIEW_VERSION"
+    implementation "androidx.viewpager2:viewpager2:$VIEWPAGER2_VERSION"
+    implementation "com.google.android.material:material:$MATERIAL_VERSION"
+
+    // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$NAV_VERSION"
     implementation "androidx.navigation:navigation-ui-ktx:$NAV_VERSION"
-
-    // Dynamic Feature Module Support
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$NAV_VERSION"
 
-    //common
-    implementation "com.google.code.gson:gson:${GSON_VERSION}"
-    implementation "pub.devrel:easypermissions:${EASY_PERMISSON_VERSION}"
+    // lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$LIFE_CYCLE_VERSION"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$LIFE_CYCLE_VERSION"
 
-    //test
-    testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:${MOCKITO_VERSION}"
-    testImplementation "org.powermock:powermock-api-mockito2:${POWER_MOCK_VERSION}"
-    testImplementation "org.powermock:powermock-module-junit4:${POWER_MOCK_VERSION}"
-    testImplementation "org.powermock:powermock-core:${POWER_MOCK_VERSION}"
-    testImplementation "org.powermock:powermock-module-junit4-rule:${POWER_MOCK_VERSION}"
-    testImplementation "org.powermock:powermock-api-mockito2:${POWER_MOCK_VERSION}"
+    // dagger
+    implementation "com.google.dagger:hilt-android:$DAGGER_HILT_VERSION"
+    kapt "com.google.dagger:hilt-android-compiler:$DAGGER_HILT_VERSION"
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    //  Lottie
+    implementation "com.airbnb.android:lottie:$LOTTIE_VERSION"
+
+    // common
+    implementation "com.google.code.gson:gson:$GSON_VERSION"
+    implementation "pub.devrel:easypermissions:$EASY_PERMISSON_VERSION"
+
+    // test
+    testImplementation "org.mockito:mockito-core:$MOCKITO_VERSION"
+    testImplementation "org.powermock:powermock-core:$POWER_MOCK_VERSION"
+    testImplementation "org.powermock:powermock-module-junit4:$POWER_MOCK_VERSION"
+    testImplementation "org.powermock:powermock-module-junit4-rule:$POWER_MOCK_VERSION"
+    testImplementation "org.powermock:powermock-api-mockito2:$POWER_MOCK_VERSION"
+
+    // android test
+    androidTestImplementation "androidx.test.ext:junit:$ANDROID_X_JUNIT_VERSION"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$ESPRESSO_VERSION"
 
     // Testing Navigation
     androidTestImplementation "androidx.navigation:navigation-testing:$NAV_VERSION"

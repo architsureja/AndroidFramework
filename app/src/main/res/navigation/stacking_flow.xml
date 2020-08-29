@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/stackingDashboardFragment"
-        android:name="com.archit.androidframework.stacking_viewholder.fragment.StackingDashboardFragment"
+        android:name="com.archit.androidframework.stacking_viewholder.fragment.StackingViewHolderFragment"
         android:label="stacking_dashboard_fragment"
         tools:layout="@layout/stacking_dashboard_fragment" />
 </navigation>

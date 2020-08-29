@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MultiStateButton">
+        <attr name="idleText" format="string"/>
+        <attr name="idleTextColor" format="color"/>
+        <attr name="idleBackgroundColor" format="color"/>
+        <attr name="idleButtonFaString" format="string"/>
+        <attr name="loadingBackgroundColor" format="color"/>
+        <attr name="successText" format="string"/>
+        <attr name="successTextColor" format="color"/>
+        <attr name="fitWidth" format="boolean"/>
+        <attr name="successBackgroundColor" format="color"/>
+        <attr name="successButtonFaString" format="string"/>
+        <attr name="initialState" format="enum">
+            <enum name="hidden" value="0"/>
+            <enum name="idle" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>

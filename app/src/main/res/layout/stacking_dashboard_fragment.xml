@@ -3,11 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.archit.androidframework.stacking_viewholder.fragment.StackingDashboardFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.archit.androidframework.stacking_viewholder.fragment.StackingViewHolderFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent" />
+
+    <com.archit.androidframework.views.multistatebutton.MultiStateButton
+        android:id="@+id/stateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:idleText="@string/get_images"
+        />
 
 </FrameLayout>

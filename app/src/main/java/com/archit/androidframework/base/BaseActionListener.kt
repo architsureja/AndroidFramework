@@ -5,5 +5,5 @@ package com.archit.androidframework.base
  */
 
 interface BaseActionListener<T> {
-    fun performAction(action: T)
+    fun performAction(action: T, payload: Any? = null)
 }
