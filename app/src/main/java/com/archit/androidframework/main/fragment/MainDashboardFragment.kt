@@ -23,7 +23,7 @@ class MainDashboardFragment :
         }
     }
 
-    override fun performAction(action: Action) {
+    override fun performAction(action: Action, payload: Any?) {
         when (action) {
             Action.START_PICKER_FLOW ->
                 view?.findNavController()?.navigate(R.id.actionStartPickerActivity)

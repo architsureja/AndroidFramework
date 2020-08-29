@@ -3,4 +3,14 @@
     <dimen name="number_picker_center_line_height">2dp</dimen>
     <dimen name="number_picker_center_line_margin">32dp</dimen>
     <dimen name="number_picker_width">64dp</dimen>
+    <dimen name="list_invite_offset">8dp</dimen>
+    <dimen name="list_item_margin">8dp</dimen>
+    <dimen name="multi_state_button_loader_size">48dp</dimen>
+    <dimen name="multi_state_button_loader_padding">12dp</dimen>
+    <dimen name="multi_state_button_drawable_padding">8dp</dimen>
+    <dimen name="material_text_subhead">16sp</dimen>
+    <dimen name="multi_state_button_padding_horizontal">32dp</dimen>
+    <dimen name="multi_state_button_padding_vertical">14dp</dimen>
+    <dimen name="list_item_corner_radius">16dp</dimen>
+    <dimen name="list_item_elevation">8dp</dimen>
 </resources>

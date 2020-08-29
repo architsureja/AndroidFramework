@@ -8,5 +8,5 @@ class PickerDashboardFragment :
     BaseFragment<PickerDashboardViewModel.Action, PickerDashboardViewModel>(
         R.layout.picker_dashboard_fragment
     ) {
-    override fun performAction(action: PickerDashboardViewModel.Action) = Unit
+    override fun performAction(action: PickerDashboardViewModel.Action, payload: Any?) = Unit
 }

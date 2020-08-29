@@ -36,6 +36,18 @@ internal fun Int.convertDpToPixel(context: Context): Int {
     return (this@convertDpToPixel * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)).toInt()
 }
 
+internal fun View.updateWidth(width: Int) {
+    val layoutParams = this.layoutParams
+    layoutParams.width = width
+    this.layoutParams = layoutParams
+}
+
+internal fun View.updateHeight(height: Int) {
+    val layoutParams = this.layoutParams
+    layoutParams.height = height
+    this.layoutParams = layoutParams
+}
+
 internal fun View.setOnClickListener() = callbackFlow {
     this@setOnClickListener.setOnClickListener {
         offer(it as View)
